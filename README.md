@@ -14,3 +14,4 @@ This repository contains the source code for my final project. The project is he
 2. Install Pygame via Git Bash or terminal:
    ```bash
    pip install pygame
+3. Run the main file: main.py
