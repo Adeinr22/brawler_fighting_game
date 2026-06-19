@@ -13,13 +13,25 @@ pygame.display.set_caption("Brawler")
 clock = pygame.time.Clock()
 FPS = 60 
 
-# load background image
+# colors
+YELLOW = (255, 255, 0)
+RED = (255, 0, 0)
+WHITE = (255, 255, 255)
+
+# load background image 
 bg_image = pygame.image.load("assets/images/background/background.jpg").convert_alpha()
 
 # drawing background
 def draw_bg():
     scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     screen.blit(scaled_bg, (0,0))
+
+# drawing fighter healthbars
+def draw_health_bar(health, x, y):
+    ratio = health / 100
+    pygame.draw.rect(screen, WHITE, (x - 3, y - 3, 406, 36))
+    pygame.draw.rect(screen, RED, (x, y, 400, 30))
+    pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
 
 # create instances for Fighter
 fighter_1 = Fighter(200, 310)
@@ -34,8 +46,12 @@ while run:
     # draw background
     draw_bg()
 
+    # show player stats
+    draw_health_bar(fighter_1.health, 20, 20)
+    draw_health_bar(fighter_2.health, 580, 20)
+
     # move fighters
-    fighter_1.move(SCREEN_WIDTH)
+    fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2)
 
 
     # draw fighters
