@@ -1,6 +1,5 @@
 import pygame
 from pygame import mixer
-from fighter import Fighter
 from warrior import Warrior
 from wizard import Wizard
 

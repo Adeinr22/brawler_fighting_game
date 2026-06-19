@@ -78,14 +78,15 @@ class Fighter(ABC): # <-- Inherit from ABC to make this an Abstract Base Class
         self.rect.x += dx
         self.rect.y += dy
 
+    # Inside fighter.py:
     def update(self):
         # Check what action the player is performing
         if self._health <= 0:
             self._health = 0
             self._alive = False
-            self.update_action(6) # 6: Death Animation
+            self.update_action(6) # 6: death animation
         elif self.hit == True:
-            self.update_action(5) # 5: Hit Animation
+            self.update_action(5) # 5: hit animation
         elif self.attacking == True:
             if self.attack_type == 1:
                 self.update_action(3)
@@ -98,30 +99,33 @@ class Fighter(ABC): # <-- Inherit from ABC to make this an Abstract Base Class
         else:
             self.update_action(0)
 
+        # CONTROL ANIMATION COOLDOWN / FRAMERATE DELAY
+        # You can increase this number (e.g., 70 or 80) to slow down the hit animation frames specifically!
         animation_cooldown = 50
-        # Update image
+        
+        # update image
         self.image = self.animation_list[self.action][self.frame_index]
-        # Check if enough time has passed since the last update
+        # check if enough time has passed since the last update
         if pygame.time.get_ticks() - self.update_time > animation_cooldown:
             self.frame_index += 1
             self.update_time = pygame.time.get_ticks()
             
-        # Check if the animation has finished
+        # check if the animation has finished
         if self.frame_index >= len(self.animation_list[self.action]):
-            # If the player is dead, keep them on the last frame of the death animation
             if self._alive == False:
                 self.frame_index = len(self.animation_list[self.action]) - 1
             else:
                 self.frame_index = 0
-                # Check if an attack was executed
+                # check if an attack was executed
                 if self.action == 3 or self.action == 4:
                     self.attacking = False
                     self.attack_cooldown = 20
-                # Check if damage was taken
+                # Check if the full hit animation finished playing before resetting state
                 if self.action == 5:
                     self.hit = False
                     self.attacking = False
-                    self.attack_cooldown = 20
+                    # Optional: Lock their next action briefly so they are staggered
+                    self.attack_cooldown = 15
 
     def attack(self, target):
         if self.attack_cooldown == 0:
