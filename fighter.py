@@ -1,8 +1,9 @@
 import pygame
 
+# --- THE PARENT CLASS ---
 class Fighter():
-    def __init__(self, player, x, y, flip, data, sprite_sheet, animation_steps, sound):
-        self.player = player
+    def __init__(self, x, y, flip, data, sprite_sheet, animation_steps, sound):
+        # All shared attributes remain here
         self.size = data[0]
         self.image_scale = data[1]
         self.offset = data[2]
@@ -12,7 +13,7 @@ class Fighter():
         self.frame_index = 0
         self.image = self.animation_list[self.action][self.frame_index]
         self.update_time = pygame.time.get_ticks()
-        self.rect = pygame.Rect((x,y, 80,180))
+        self.rect = pygame.Rect((x, y, 80, 180))
         self.vel_y = 0
         self.running = False
         self.jump = False
@@ -25,7 +26,6 @@ class Fighter():
         self.alive = True
 
     def load_images(self, sprite_sheet, animation_steps):
-        # extract images from spritesheet
         animation_list = []
         for y, animation in enumerate(animation_steps):
             temp_img_list = []
@@ -35,55 +35,26 @@ class Fighter():
             animation_list.append(temp_img_list)
         return animation_list
 
-    def move(self, screen_width, screen_height, surface, target, round_over):
+    def move(self, screen_width, screen_height, target, round_over):
         SPEED = 10
         GRAVITY = 2
         dx = 0
         dy = 0
         self.running = False
         self.attack_type = 0
-        # movement
+        
         key = pygame.key.get_pressed()
+        
+        # The movement conditionals are completely removed from here!
+        # Instead, we call a method that the Child classes will handle locally.
         if self.attacking == False and self.alive == True and round_over == False:
-            if self.player == 1:
-                if key[pygame.K_a]:
-                    dx = -SPEED
-                    self.running = True
-                if key[pygame.K_d]:
-                    dx = SPEED
-                    self.running = True
-                if key[pygame.K_w] and self.jump == False:
-                    self.vel_y = -30
-                    self.jump = True
-                if key[pygame.K_r] or key[pygame.K_t]:
-                    self.attack(target)
-                    # which attack type
-                    if key[pygame.K_r]:
-                        self.attack_type = 1
-                    if key[pygame.K_t]:
-                        self.attack_type = 2
-            
-            if self.player == 2:
-                if key[pygame.K_LEFT]:
-                    dx = -SPEED
-                    self.running = True
-                if key[pygame.K_RIGHT]:
-                    dx = SPEED
-                    self.running = True
-                if key[pygame.K_UP] and self.jump == False:
-                    self.vel_y = -30
-                    self.jump = True
-                if key[pygame.K_KP1] or key[pygame.K_KP2]:
-                    self.attack(target)
-                    # which attack type
-                    if key[pygame.K_KP1]:
-                        self.attack_type = 1
-                    if key[pygame.K_KP2]:
-                        self.attack_type = 2
-        # apply gravity
+            dx = self.handle_input(key, SPEED, target)
+
+        # Apply gravity and physics (shared by both characters)
         self.vel_y += GRAVITY   
         dy += self.vel_y
-        # ensure player stays on screen
+        
+        # Ensure player stays on screen (shared by both characters)
         if self.rect.left + dx < 0:
             dx = -self.rect.left
         if self.rect.right + dx > screen_width:
@@ -92,15 +63,16 @@ class Fighter():
             self.vel_y = 0
             self.jump = False
             dy = screen_height - 110 - self.rect.bottom
-        # ensure player face each other
+            
+        # Face each other (shared)
         if target.rect.centerx > self.rect.centerx:
             self.flip = False
         else:
             self.flip = True
-        # attack cooldown
+            
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
-        # update player position
+            
         self.rect.x += dx
         self.rect.y += dy
 
