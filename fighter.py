@@ -42,11 +42,8 @@ class Fighter():
         dy = 0
         self.running = False
         self.attack_type = 0
-
-        # get key presses
-        key = pygame.key.get_pressed()
-
         # movement
+        key = pygame.key.get_pressed()
         if self.attacking == False and self.alive == True and round_over == False:
             if self.player == 1:
                 if key[pygame.K_a]:
@@ -83,12 +80,9 @@ class Fighter():
                         self.attack_type = 1
                     if key[pygame.K_KP2]:
                         self.attack_type = 2
-            
-
         # apply gravity
         self.vel_y += GRAVITY   
         dy += self.vel_y
-
         # ensure player stays on screen
         if self.rect.left + dx < 0:
             dx = -self.rect.left
@@ -98,16 +92,14 @@ class Fighter():
             self.vel_y = 0
             self.jump = False
             dy = screen_height - 110 - self.rect.bottom
-
         # ensure player face each other
         if target.rect.centerx > self.rect.centerx:
             self.flip = False
         else:
             self.flip = True
-
+        # attack cooldown
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
-
         # update player position
         self.rect.x += dx
         self.rect.y += dy

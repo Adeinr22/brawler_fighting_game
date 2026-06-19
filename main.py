@@ -5,14 +5,13 @@ from fighter import Fighter
 mixer.init()
 pygame.init()   
 
-# create game window
+# game window
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
-
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Brawler")
 
-# set framerate
+# framerate
 clock = pygame.time.Clock()
 FPS = 60 
 
@@ -38,7 +37,7 @@ WIZARD_SCALE = 3
 WIZARD_OFFSET = [112, 107]
 WIZARD_DATA = [WIZARD_SIZE, WIZARD_SCALE, WIZARD_OFFSET]
 
-# load music and sounds
+# music and sounds
 pygame.mixer.music.load("assets/audio/music.mp3")
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1, 0.0, 5000)
@@ -47,15 +46,16 @@ sword_fx.set_volume(0.5)
 fire_magic_fx = pygame.mixer.Sound("assets/audio/fire_magic.wav")
 fire_magic_fx.set_volume(0.75)
 
-# load background image 
+# background image 
 bg_image = pygame.image.load("assets/images/background/background.jpg").convert_alpha()
 
-# load spritesheets
+# spritesheets
 warrior_sheet = pygame.image.load("assets/images/warrior/sprites/warrior.png").convert_alpha()
 wizard_sheet = pygame.image.load("assets/images/wizard/sprites/wizard.png").convert_alpha()
 
 # victory image
 victory_img = pygame.image.load("assets/images/icons/victory.png").convert_alpha()
+
 # number of steps in each animation
 WARRIOR_ANIMATION_STEPS = [10, 8, 1, 7, 7, 3, 7]
 WIZARD_ANIMATION_STEPS = [8, 8, 1, 8, 8, 3, 7]
@@ -88,18 +88,14 @@ fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATI
 # game loop
 run = True
 while run:
-
     clock.tick(FPS)
-
     # draw background
     draw_bg()
-
     # show player stats
     draw_health_bar(fighter_1.health, 20, 20)
     draw_health_bar(fighter_2.health, 580, 20)
     draw_text("P1: " + str(score[0]), score_font, RED, 20, 60)
     draw_text("P2: " + str(score[1]), score_font, RED, 580, 60)
-
     # countdown
     if intro_count <= 0:
         # move fighters
@@ -109,17 +105,13 @@ while run:
         draw_text(str(intro_count), count_font, RED, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 3)
         if (pygame.time.get_ticks() - last_count_update) >= 1000:
             intro_count -= 1
-            last_count_update = pygame.time.get_ticks()
-            
-
+            last_count_update = pygame.time.get_ticks()   
     # update fighters
     fighter_1.update()
     fighter_2.update()
-
     # draw fighters
     fighter_1.draw(screen)
     fighter_2.draw(screen)
-
     # player defeat
     if round_over == False:
         if fighter_1.alive == False:
@@ -137,14 +129,11 @@ while run:
             intro_count = 3
             fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
             fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, fire_magic_fx)
-
     # event handler
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-
     # update display
     pygame.display.update()
-
 # exit pygame
 pygame.quit()
