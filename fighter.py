@@ -79,12 +79,13 @@ class Fighter(ABC): # <-- Inherit from ABC to make this an Abstract Base Class
         self.rect.y += dy
 
     def update(self):
-        if self.health <= 0:
-            self.health = 0
-            self.alive = False
-            self.update_action(6)
+        # Check what action the player is performing
+        if self._health <= 0:
+            self._health = 0
+            self._alive = False
+            self.update_action(6) # 6: Death Animation
         elif self.hit == True:
-            self.update_action(5)
+            self.update_action(5) # 5: Hit Animation
         elif self.attacking == True:
             if self.attack_type == 1:
                 self.update_action(3)
@@ -98,18 +99,25 @@ class Fighter(ABC): # <-- Inherit from ABC to make this an Abstract Base Class
             self.update_action(0)
 
         animation_cooldown = 50
+        # Update image
         self.image = self.animation_list[self.action][self.frame_index]
+        # Check if enough time has passed since the last update
         if pygame.time.get_ticks() - self.update_time > animation_cooldown:
             self.frame_index += 1
             self.update_time = pygame.time.get_ticks()
+            
+        # Check if the animation has finished
         if self.frame_index >= len(self.animation_list[self.action]):
-            if self.alive == False:
+            # If the player is dead, keep them on the last frame of the death animation
+            if self._alive == False:
                 self.frame_index = len(self.animation_list[self.action]) - 1
             else:
                 self.frame_index = 0
+                # Check if an attack was executed
                 if self.action == 3 or self.action == 4:
                     self.attacking = False
                     self.attack_cooldown = 20
+                # Check if damage was taken
                 if self.action == 5:
                     self.hit = False
                     self.attacking = False

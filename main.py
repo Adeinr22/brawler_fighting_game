@@ -116,11 +116,11 @@ while run:
     fighter_2.draw(screen)
     # player defeat
     if round_over == False:
-        if fighter_1.alive == False:
+        if not fighter_1.alive: 
             score[1] += 1
             round_over = True
             round_over_time = pygame.time.get_ticks()
-        elif fighter_2.alive == False:
+        elif not fighter_2.alive:
             score[0] += 1
             round_over = True
             round_over_time = pygame.time.get_ticks()
