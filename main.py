@@ -1,6 +1,8 @@
 import pygame
 from pygame import mixer
 from fighter import Fighter
+from warrior import Warrior
+from wizard import Wizard
 
 mixer.init()
 pygame.init()   
@@ -82,8 +84,8 @@ def draw_health_bar(health, x, y):
     pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
 
 # create instances for Fighter
-fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
-fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, fire_magic_fx)
+fighter_1 = Warrior(200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
+fighter_2 = Wizard(700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, fire_magic_fx)
 
 # game loop
 run = True
@@ -99,8 +101,8 @@ while run:
     # countdown
     if intro_count <= 0:
         # move fighters
-        fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, round_over)
-        fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, round_over)
+        fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, fighter_2, round_over)
+        fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, fighter_1, round_over)
     else:
         draw_text(str(intro_count), count_font, RED, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 3)
         if (pygame.time.get_ticks() - last_count_update) >= 1000:
@@ -127,8 +129,8 @@ while run:
         if pygame.time.get_ticks() - round_over_time > ROUND_OVER_COOLDOWN:
             round_over = False
             intro_count = 3
-            fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
-            fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, fire_magic_fx)
+            fighter_1 = Warrior(200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
+            fighter_2 = Wizard(700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, fire_magic_fx)
     # event handler
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

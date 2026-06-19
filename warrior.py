@@ -1,4 +1,5 @@
 import pygame
+from fighter import Fighter
 
 class Warrior(Fighter): # Inherits from Fighter parent class
     def handle_input(self, key, speed, target):
