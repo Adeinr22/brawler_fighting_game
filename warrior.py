@@ -31,5 +31,5 @@ class Warrior(Fighter): # Inherits from Fighter parent class
             attacking_rect = pygame.Rect(self.rect.centerx - (1.5 * self.rect.width * self.flip), self.rect.y, 1.5 * self.rect.width, self.rect.height)
             
             if attacking_rect.colliderect(target.rect):
-                target.health -= 18  # Warriors hit much harder!
+                target.take_damage(12) # Warriors hit much harder!
                 target.hit = True

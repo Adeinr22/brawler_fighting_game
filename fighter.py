@@ -23,8 +23,9 @@ class Fighter(ABC): # <-- Inherit from ABC to make this an Abstract Base Class
         self.attack_cooldown = 0 
         self.attack_sound = sound
         self.hit = False
-        self.health = 100
-        self.alive = True
+        # Encapsulation:
+        self._health = 100
+        self._alive = True
 
     def load_images(self, sprite_sheet, animation_steps):
         animation_list = []
@@ -137,3 +138,21 @@ class Fighter(ABC): # <-- Inherit from ABC to make this an Abstract Base Class
     def handle_input(self, key, speed, target):
         """Every child character MUST override this method to handle their own keys."""
         pass
+
+    @property
+    def health(self):
+        return self._health
+
+    # Getter Property: Read-only access to alive status
+    @property
+    def alive(self):
+        return self._alive
+
+    # Setter/Action Method: The ONLY authorized way to modify an object's health state
+    def take_damage(self, damage_amount):
+        if self._alive:
+            self._health -= damage_amount
+            self.hit = True
+            if self._health <= 0:
+                self._health = 0
+                self._alive = False

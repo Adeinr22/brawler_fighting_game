@@ -13,7 +13,7 @@ SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Brawler")
 
-# framerate
+# framerater
 clock = pygame.time.Clock()
 FPS = 60 
 
