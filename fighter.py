@@ -127,14 +127,10 @@ class Fighter(ABC): # <-- Inherit from ABC to make this an Abstract Base Class
                     # Optional: Lock their next action briefly so they are staggered
                     self.attack_cooldown = 15
 
+    @abstractmethod
     def attack(self, target):
-        if self.attack_cooldown == 0:
-            self.attacking = True
-            self.attack_sound.play()
-            attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
-            if attacking_rect.colliderect(target.rect):
-                target.health -= 10
-                target.hit = True
+        """Abstract method: Every sub-character must define their own custom hitboxes and damage mechanics."""
+        pass
 
     def update_action(self, new_action):
         if new_action != self.action:
