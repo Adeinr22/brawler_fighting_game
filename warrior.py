@@ -27,9 +27,9 @@ class Warrior(Fighter): # Inherits from Fighter parent class
             self.attacking = True
             self.attack_sound.play()
             
-            # Heavy Melee Attack Box: short reach (1.5x width), but deals high damage
+            # Heavy Melee Attack Box: short reach (2.3x width), but deals high damage
             attacking_rect = pygame.Rect(self.rect.centerx - (2.3 * self.rect.width * self.flip), self.rect.y, 2.3 * self.rect.width, self.rect.height)
             
             if attacking_rect.colliderect(target.rect):
-                target.take_damage(12) # Warriors hit much harder!
+                target.take_damage(12) 
                 target.hit = True

@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod
 # --- THE PARENT CLASS ---
 class Fighter(ABC): # <-- Inherit from ABC to make this an Abstract Base Class
     def __init__(self, x, y, flip, data, sprite_sheet, animation_steps, sound):
-        # All shared attributes remain here
         self.size = data[0]
         self.image_scale = data[1]
         self.offset = data[2]
@@ -47,16 +46,14 @@ class Fighter(ABC): # <-- Inherit from ABC to make this an Abstract Base Class
         
         key = pygame.key.get_pressed()
         
-        # The movement conditionals are completely removed from here!
-        # Instead, we call a method that the Child classes will handle locally.
         if self.attacking == False and self.alive == True and round_over == False:
             dx = self.handle_input(key, SPEED, target)
 
-        # Apply gravity and physics (shared by both characters)
+        # Apply gravity and physics 
         self.vel_y += GRAVITY   
         dy += self.vel_y
         
-        # Ensure player stays on screen (shared by both characters)
+        # Ensure player stays on screen 
         if self.rect.left + dx < 0:
             dx = -self.rect.left
         if self.rect.right + dx > screen_width:
@@ -78,15 +75,13 @@ class Fighter(ABC): # <-- Inherit from ABC to make this an Abstract Base Class
         self.rect.x += dx
         self.rect.y += dy
 
-    # Inside fighter.py:
     def update(self):
-        # Check what action the player is performing
         if self._health <= 0:
             self._health = 0
             self._alive = False
-            self.update_action(6) # 6: death animation
+            self.update_action(6) 
         elif self.hit == True:
-            self.update_action(5) # 5: hit animation
+            self.update_action(5) 
         elif self.attacking == True:
             if self.attack_type == 1:
                 self.update_action(3)
@@ -100,7 +95,6 @@ class Fighter(ABC): # <-- Inherit from ABC to make this an Abstract Base Class
             self.update_action(0)
 
         # CONTROL ANIMATION COOLDOWN / FRAMERATE DELAY
-        # You can increase this number (e.g., 70 or 80) to slow down the hit animation frames specifically!
         animation_cooldown = 50
         
         # update image
@@ -151,12 +145,12 @@ class Fighter(ABC): # <-- Inherit from ABC to make this an Abstract Base Class
     def health(self):
         return self._health
 
-    # Getter Property: Read-only access to alive status
+    # Getter Property
     @property
     def alive(self):
         return self._alive
 
-    # Setter/Action Method: The ONLY authorized way to modify an object's health state
+    # Setter/Action Method
     def take_damage(self, damage_amount):
         if self._alive:
             self._health -= damage_amount
